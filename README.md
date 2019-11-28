@@ -27,3 +27,46 @@ For this part of the assignment we were tasked to find out what the other servo 
 File: [Servowrite.js](Servowrite.js)
 
 Demo: [https://imgur.com/a/ESDbwTd](https://imgur.com/a/ESDbwTd)
+### Task 2: Basic I2C Utilization
+#### Part 1: Initial Reading Questions
+1. What are the disadvantages of the other two serial communication channels, UART and SPI, and how does I2C improve on them?
+
+The issue with serial UART ports is that they only allow for data transfer between, at most, two devices at the same time and since the these ports do not transmit clock data, the data transfer rates have to be in sync with each other. This means that they need to have a start bit and end bit resulting in the need of 10 bits when transfering rather than 8 bits lowering the efficiency of this type of data transfer. The main disadvantage of SPI ports is that although they can allow for the data transfer between, potentially, infinite devices the amount of i/o pins needed will increase linearly with the number of slaves being used in the system. This results in more space and resources required to run the SPI ports. I2C improves on these two by only requiring two connections between slave and master similarly to the UART ports and allowing for more than 2 devices to be connected similarly to the SPI ports. 
+
+2. I2C is a two-wire serial communication channel. What are the two wires, SDA and SCL?
+
+The SDA wire is the data transfer signal and it is responsible for the actual bits of data bring transfered. The SCL wire is the clock signal and it is tells the masters and slaves when data is ready to be transfered and depending on if the clock is high or low it will transfer the data. 
+
+3. What distinguishes the master and the slaves?
+
+The main distinguishing trait between the two is that the SCL wire only goes one way, which is away from the master towards the slaves. Based on this you can tell which one is the slave and which one is the master because of the direction of the SCL wire.
+
+4. How are the two types of protocol frames different?
+
+The two types of protocol frames are the address frame and the data frame. The difference is that the address frame is just 8 bits of data that give the transfers an address between the slave and the master so that the data frame can write to that address. The data frame does not necesarilly have to be 8 bits and it must follow an address frame. 
+
+5. What is the most appropriate trigger for capturing an I2C frame on the oscilloscope?
+
+The most appropriate trigger for the capturing of an I2C frame on the oscilloscope would be a decreasing slope trigger on the SDA channel because as shown in the reading the SDA channel will initially be pulled low at the start of the frame.
+
+#### Part 2: I2C Usage
+##### Initial I2C setup and reading
+Initial I2C capture: [https://imgur.com/a/EuLFyL5](https://imgur.com/a/EuLFyL5)
+
+1. What frame did you capture?
+
+The frame that we captured was address frame because it is the initial frame that is sent with I2C and you can also tell that it is the address frame because it has an ACK at the end of the SDA signal shown on the oscilloscope.
+
+2. What does the I2C write function do when there is nothing connected?
+
+Since there is no slave connected it does not initially pull the SDA signal low and nothing happens.
+
+Specific Address I2C capture: [https://imgur.com/a/FXoBlJ6](https://imgur.com/a/FXoBlJ6)
+
+3. Is there a difference in what you capture if you write a number to one of the internal device addresses? (The accelerometer and magentometer (compass) are connected to the I2C bus on the micro:bit PCB. Their addresses can be found here.)
+
+There is a slight difference on the oscilliscope since the address it is being written to is now different than the arbitrary one used in the initial I2C capture.
+##### I2C number read
+For this part of the assignment we followed the steps and recorded our findings with annotations in the code. The annotations contain observations that comply with what was being asked for this segment. 
+
+File: [I2C-internal-readings.js](I2C-internal-readings.js)
